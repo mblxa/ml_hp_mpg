@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs-node';
-import {Car} from "./get-data";
+import {TrainData} from "./get-data";
 
-export const convertToTensor = (data: Car[]) => {
+export const convertToTensor = (data: TrainData[]) => {
     // Wrapping these calculations in a tidy will dispose any
     // intermediate tensors.
 
@@ -11,7 +11,7 @@ export const convertToTensor = (data: Car[]) => {
 
         // Step 2. Convert data to Tensor
         const inputs = data.map(d => d.horsepower)
-        const labels = data.map(d => d.mpg);
+        const labels = data.map(d => d.acceleration);
 
         const inputTensor = tf.tensor2d(inputs, [inputs.length, 1]);
         const labelTensor = tf.tensor2d(labels, [labels.length, 1]);

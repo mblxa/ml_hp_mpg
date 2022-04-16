@@ -1,3 +1,18 @@
+/**
+ * Get the car data reduced to just the variables we are interested
+ * and cleaned of missing data.
+ */
+async function getData() {
+    const carsDataResponse = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');
+    const carsData = await carsDataResponse.json();
+    const cleaned = carsData.map(car => ({
+        mpg: car.Miles_per_Gallon,
+        horsepower: car.Horsepower,
+    }))
+        .filter(car => (car.mpg != null && car.horsepower != null));
+
+    return cleaned;
+}
 function renderBaseChart(values) {
     tfvis.render.scatterplot(
         {name: 'Horsepower v MPG'},
@@ -46,7 +61,7 @@ async function run() {
     // await trainModel(model, inputs, labels);
     // await model.save('localstorage://test-model-2');
     // console.log('Done Training');
-    const model = await createOrReadModel(false, "localstorage://test-model-2")
+    const model = await tf.loadLayersModel('http://localhost:3000/model');
 
     console.log(predict(model, 100, tensorData), predict(model, 120, tensorData))
 
@@ -57,21 +72,6 @@ async function run() {
 
 document.addEventListener('DOMContentLoaded', run);
 
-
-function createModel() {
-    // Create a sequential model
-    const model = tf.sequential();
-
-    // Add a single input layer
-    model.add(tf.layers.dense({inputShape: [1], units: 1, useBias: true}));
-    model.add(tf.layers.dense({units: 50, activation: 'sigmoid'}));
-
-
-    // Add an output layer
-    model.add(tf.layers.dense({units: 1, useBias: true}));
-
-    return model;
-}
 
 /**
  * Convert the input data to tensors that we can use for machine
@@ -114,29 +114,6 @@ function convertToTensor(data) {
             labelMax,
             labelMin,
         }
-    });
-}
-
-async function trainModel(model, inputs, labels) {
-    // Prepare the model for training.
-    model.compile({
-        optimizer: tf.train.adam(),
-        loss: tf.losses.meanSquaredError,
-        metrics: ['mse'],
-    });
-
-    const batchSize = 32;
-    const epochs = 1500;
-
-    return await model.fit(inputs, labels, {
-        batchSize,
-        epochs,
-        shuffle: true,
-        callbacks: tfvis.show.fitCallbacks(
-            { name: 'Training Performance' },
-            ['loss', 'mse'],
-            { height: 200, callbacks: ['onEpochEnd'] }
-        )
     });
 }
 

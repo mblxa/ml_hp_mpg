@@ -5,9 +5,9 @@ import {trainModel} from "./train-model";
 import {predict} from "./predict";
 
 (async () => {
-    const modelName = 'model2';
+    const modelName = 'model3';
     const modelPath = `file://./model/${modelName}`;
-    const isNew = false;
+    const isNew = true;
 
     const result = await getData()
     const model = await createOrReadModel(isNew, modelPath);
@@ -19,7 +19,7 @@ import {predict} from "./predict";
         await model.save(modelPath)
     }
 
-    console.log(predict(model, 10, data))
-    console.log(predict(model, 100, data))
+    // console.log(predict(model, 10, data))
+    // console.log(predict(model, 100, data))
 
 })()
