@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-const model = 'model3';
+const model = 'model4';
 app.get('/model',async (req, res) => {
     // const file = fs.readFileSync('./model/model2/model.json', )
     res.sendFile(`./model/${model}/model.json`, fileOptions)

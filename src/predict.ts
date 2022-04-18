@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs-node';
 
-export const predict = (model:tf.Sequential, value: number, params: any) => {
-    const inputTensor = tf.tensor2d([value], [1, 1]);
+export const predict = (model:tf.Sequential, hp: number, weight: number, params: any) => {
+    const inputTensor = tf.tensor3d([hp, weight], [1, 2, 1]);
     const normalizedInputs = inputTensor
         .sub(params.inputMin)
         .div(params.inputMax.sub(params.inputMin));

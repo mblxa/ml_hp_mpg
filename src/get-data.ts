@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import * as tf from "@tensorflow/tfjs-node";
 
 export type ApiCar = {
     Acceleration: number;
@@ -16,7 +17,7 @@ export type Car = {
     horsepower: number;
 }
 
-export type TrainData = Pick<Car, "acceleration" | "horsepower">
+export type TrainData = Pick<Car, "acceleration" | "horsepower" | "weight">
 
 export const getData = async (): Promise<TrainData[]> => {
     const carsDataResponse = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');
@@ -24,8 +25,10 @@ export const getData = async (): Promise<TrainData[]> => {
     const cleaned = carsData.map<TrainData>(car => ({
         acceleration: car.Acceleration,
         horsepower: car.Horsepower,
+        weight: car.Weight_in_lbs,
     }))
-        .filter(car => (car.acceleration != null && car.horsepower != null));
+        .filter(car => (car.acceleration != null && car.horsepower != null && car.weight != null));
 
+    tf.util.shuffle(cleaned)
     return cleaned;
 }

@@ -54,8 +54,7 @@ async function run() {
         y: d.weight
     }));
     await renderBaseChart(values1)
-
-    await renderBaseChart(values2)
+    // await renderBaseChart(values2)
 
     // Create the model
     const model = createModel();

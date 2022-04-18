@@ -10,10 +10,18 @@ export const convertToTensor = (data: TrainData[]) => {
         tf.util.shuffle(data);
 
         // Step 2. Convert data to Tensor
-        const inputs = data.map(d => d.horsepower)
-        const labels = data.map(d => d.acceleration);
+        // const inputs = data.map(d => d.horsepower)
+        const labels = data.map(d => d.horsepower);
 
-        const inputTensor = tf.tensor2d(inputs, [inputs.length, 1]);
+        const inputs: number[] = [];
+        data.forEach((item) => {
+            inputs.push(item.acceleration)
+            inputs.push(item.weight)
+        })
+
+
+        const inputTensor = tf.tensor3d(inputs, [inputs.length /2, 2, 1]);
+        // const inputTensor = tf.tensor2d(inputs, [inputs.length, 1]);
         const labelTensor = tf.tensor2d(labels, [labels.length, 1]);
 
         //Step 3. Normalize the data to the range 0 - 1 using min-max scaling
