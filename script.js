@@ -86,6 +86,11 @@ function createModel() {
     return model;
 }
 
+const normalize = tensor =>
+    tf.div(
+        tf.sub(tensor, tf.min(tensor)),
+        tf.sub(tf.max(tensor), tf.min(tensor))
+    );
 /**
  * Convert the input data to tensors that we can use for machine
  * learning. We will also do the important best practices of _shuffling_
@@ -113,12 +118,10 @@ function convertToTensor(data) {
         const labelMax = labelTensor.max();
         const labelMin = labelTensor.min();
 
-        const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
-        const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
+        const normalizedInputs = normalize(inputTensor)
+        const normalizedLabels = normalize(labelTensor)
 
         return {
-            // inputs: inputTensor,
-            // labels: labelTensor,
             inputs: normalizedInputs,
             labels: normalizedLabels,
             // Return the min/max bounds so we can use them later.
