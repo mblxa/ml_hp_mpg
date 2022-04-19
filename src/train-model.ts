@@ -5,15 +5,17 @@ export const trainModel = async (model: tf.Sequential, inputs: tf.Tensor, labels
     model.compile({
         optimizer: tf.train.adam(),
         loss: tf.losses.meanSquaredError,
-        metrics: ['mse'],
+        metrics: ['accuracy'],
     });
 
     const batchSize = 32;
-    const epochs = 1500;
+    const epochs = 100;
 
-    return await model.fit(inputs, labels, {
+    await model.fit(inputs, labels, {
         batchSize,
         epochs,
         shuffle: true,
     });
+
+    return model;
 }

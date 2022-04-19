@@ -10,17 +10,19 @@ export const convertToTensor = (data: TrainData[]) => {
         tf.util.shuffle(data);
 
         // Step 2. Convert data to Tensor
-        // const inputs = data.map(d => d.horsepower)
-        const labels = data.map(d => d.horsepower);
+        // const inputs = data.map(d => d.Score)
+        const labels = data.map(d => d.Exited);
 
         const inputs: number[] = [];
         data.forEach((item) => {
-            inputs.push(item.acceleration)
-            inputs.push(item.weight)
+            inputs.push(item.Score)
+            inputs.push(item.Tenure)
+            inputs.push(item.Balance)
+            inputs.push(item.Products)
+            inputs.push(item.Salary)
         })
 
-
-        const inputTensor = tf.tensor3d(inputs, [inputs.length /2, 2, 1]);
+        const inputTensor = tf.tensor2d([inputs], [2, 1]);
         // const inputTensor = tf.tensor2d(inputs, [inputs.length, 1]);
         const labelTensor = tf.tensor2d(labels, [labels.length, 1]);
 

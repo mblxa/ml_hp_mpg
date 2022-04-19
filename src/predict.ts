@@ -1,7 +1,8 @@
 import * as tf from '@tensorflow/tfjs-node';
+import {TrainData} from "./get-data";
 
-export const predict = (model:tf.Sequential, hp: number, weight: number, params: any) => {
-    const inputTensor = tf.tensor3d([hp, weight], [1, 2, 1]);
+export const predict = (model:tf.Sequential, input: Omit<TrainData, "exited">, params: any) => {
+    const inputTensor = tf.tensor([input.Score, input.Tenure, input.Balance, input.Products, input.Salary], [1, 5, 1]);
     const normalizedInputs = inputTensor
         .sub(params.inputMin)
         .div(params.inputMax.sub(params.inputMin));

@@ -1,33 +1,35 @@
 import fetch from 'node-fetch';
 import * as tf from "@tensorflow/tfjs-node";
+import {jsonData} from "./csvjson";
 
-export type ApiCar = {
-    Acceleration: number;
-    Cylinders: number;
-    Weight_in_lbs: number;
-    Miles_per_Gallon: number;
-    Horsepower: number;
+//Id,Surname,Score,Nationality,Gender,Age,Tenure,Balance,Products,Card,Active,Salary,Exited
+export type ApiUser = {
+    Id: number;
+    Surname: string;
+    Score: number;
+    Gender: 'Male' | "Female";
+    Age: number;
+    Tenure: number;
+    Balance: number;
+    Products: number;
+    Card: number;
+    Active: number;
+    Salary: number;
+    Exited: number;
 }
 
-export type Car = {
-    acceleration: number;
-    cylinders: number;
-    weight: number;
-    mpg: number;
-    horsepower: number;
-}
-
-export type TrainData = Pick<Car, "acceleration" | "horsepower" | "weight">
+export type TrainData = Pick<ApiUser, "Score" | "Exited" | "Tenure" | "Balance" | "Products" | "Salary">
 
 export const getData = async (): Promise<TrainData[]> => {
-    const carsDataResponse = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');
-    const carsData: ApiCar[] = await carsDataResponse.json() as ApiCar[];
-    const cleaned = carsData.map<TrainData>(car => ({
-        acceleration: car.Acceleration,
-        horsepower: car.Horsepower,
-        weight: car.Weight_in_lbs,
+    const data: ApiUser[] = jsonData as unknown as ApiUser[];
+    const cleaned = data.map<TrainData>(item => ({
+        Score: item.Score,
+        Exited: item.Exited,
+        Tenure: item.Tenure,
+        Balance: item.Balance,
+        Products: item.Products,
+        Salary: item.Salary,
     }))
-        .filter(car => (car.acceleration != null && car.horsepower != null && car.weight != null));
 
     tf.util.shuffle(cleaned)
     return cleaned;
