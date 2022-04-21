@@ -60,7 +60,7 @@ const toTensors = (data, categoricalFeatures, testSize) => {
         })
     );
 
-    console.log(X)
+    // console.log(X)
     const X_t = normalize(tf.tensor2d(X));
     const y = tf.tensor(toCategorical(data, "Churn"));
     X_t.print();

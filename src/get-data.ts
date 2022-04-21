@@ -19,5 +19,5 @@ export type ApiUser = {
 export type TrainData = ApiUser;
 
 export const getData = async (): Promise<TrainData[]> => {
-    return jsonData as unknown as ApiUser[];
+    return (jsonData as unknown as ApiUser[]).filter(item => item.Salary > 0 && item.Balance > 0);
 }

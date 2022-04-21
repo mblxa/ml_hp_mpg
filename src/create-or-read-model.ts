@@ -11,11 +11,27 @@ export const createModel = (xTrain: tf.Tensor): tf.Sequential => {
     );
 
     model.add(
+        tf.layers.dropout({rate: 0.1})
+    )
+
+    model.add(
         tf.layers.dense({
             units: 64,
             activation: "relu"
         })
     );
+    model.add(
+        tf.layers.dropout({rate: 0.2})
+    )
+    model.add(
+        tf.layers.dense({
+            units: 32,
+            activation: "relu"
+        })
+    );
+    model.add(
+        tf.layers.dropout({rate: 0.3})
+    )
     model.add(tf.layers.dense({ units: 2, activation: "softmax" }));
 
     model.compile({

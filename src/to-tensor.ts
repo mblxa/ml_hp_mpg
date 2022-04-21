@@ -5,14 +5,21 @@ import {normalize} from "./normalize";
 
 const numberData:string[] = [
     "Score",
+    "Age",
     "Tenure",
     "Balance",
-    "Salary",
-    "Age",
     "Products",
     "Card",
     "Active",
+    "Salary",
 ]
+
+// const numberData:string[] = [
+//     "SeniorCitizen",
+//     "tenure",
+//     "MonthlyCharges",
+//     "TotalCharges"
+// ]
 
 export const toTensors = (data: TrainData[], categoricalFeatures: Set<keyof TrainData>, testSize: number) => {
     const categoricalData: Record<string, any> = {};
@@ -35,12 +42,13 @@ export const toTensors = (data: TrainData[], categoricalFeatures: Set<keyof Trai
     );
 
     // console.log(X)
-    const Y: number[] = data.map(item => item.Exited);
+    const Y: number[][] = data.map(item => [1,0]);
     const {tensor: X_t} = normalize(tf.tensor2d(X));
-    const y = tf.tensor2d(toCategorical(data, "Exited"))
-console.log(X_t.print())
-//     console.log(y)
-    y.print()
+    // const y = tf.tensor2d(Y, [data.length, 2])
+    const y = tf.tensor2d(toCategorical(data, "Exited" as any))
+    // X_t.print()
+    // y.print()
+    console.log(Y.length)
     const splitIdx = parseInt(String((1 - testSize) * data.length), 10);
 
     const [xTrain, xTest] = tf.split(X_t, [splitIdx, data.length - splitIdx]);
