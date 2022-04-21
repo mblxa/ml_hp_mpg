@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs-node';
 
 export const createModel = (xTrain: tf.Tensor): tf.Sequential => {
-    const model = tf.sequential();
+    const model = tf.sequential()
     model.add(
         tf.layers.dense({
             units: 32,
@@ -16,13 +16,12 @@ export const createModel = (xTrain: tf.Tensor): tf.Sequential => {
             activation: "relu"
         })
     );
-
     model.add(tf.layers.dense({ units: 2, activation: "softmax" }));
 
     model.compile({
         optimizer: tf.train.adam(0.001),
-        loss: "binaryCrossentropy",
-        metrics: ["accuracy"]
+        loss: "categoricalCrossentropy",
+        metrics: ["accuracy"],
     });
 
     return  model

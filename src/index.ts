@@ -8,7 +8,7 @@ import {oneHot} from "./one-hot";
 import {toCategorical} from "./to-categorical";
 import {toTensors} from "./to-tensor";
 import {createModel} from "./create-or-read-model";
-import {jsonData} from "./example2";
+// import {jsonData} from "./example2";
 
 const testModel = (model: any, testData: TrainData[], data: any) => {
     const tableData = [["score", "exited", 'pred', ], ...testData.map(item => {
@@ -28,24 +28,14 @@ const testModel = (model: any, testData: TrainData[], data: any) => {
     const modelPath = `file://./model/${modelName}`;
     const isNew = true;
 
-    const trainData = jsonData as any
+    const trainData = await getData()
 
-    const categoricalFeatures = new Set<any>([
-        "Contract",
-        "PaymentMethod",
-        "gender",
-        "Partner",
-        "InternetService",
-        "Dependents",
-        "PhoneService",
-        "TechSupport",
-        "StreamingTV",
-        "PaperlessBilling"
-    ]);
+    const textData: string[] = ["Gender"]
+    const categoricalFeatures = new Set(textData);
 
     const [xTrain, xTest, yTrain, yTest] = toTensors(
         trainData,
-        categoricalFeatures,
+        categoricalFeatures as any,
         0.1
     );
 
