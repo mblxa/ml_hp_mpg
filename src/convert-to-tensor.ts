@@ -1,5 +1,6 @@
 import * as tf from '@tensorflow/tfjs-node';
 import {TrainData} from "./get-data";
+import {normalize} from "./normalize";
 
 export const convertToTensor = (data: TrainData[]) => {
     // Wrapping these calculations in a tidy will dispose any
@@ -27,17 +28,10 @@ export const convertToTensor = (data: TrainData[]) => {
         const labelTensor = tf.tensor2d(labels, [labels.length, 1]);
 
         //Step 3. Normalize the data to the range 0 - 1 using min-max scaling
-        const inputMax = inputTensor.max();
-        const inputMin = inputTensor.min();
-        const labelMax = labelTensor.max();
-        const labelMin = labelTensor.min();
-
-        const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
-        const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
+        const {tensor: normalizedInputs, min: inputMin, max: inputMax} = normalize(inputTensor)
+        const {tensor: normalizedLabels, min: labelMin, max: labelMax} = normalize(labelTensor)
 
         return {
-            // inputs: inputTensor,
-            // labels: labelTensor,
             inputs: normalizedInputs,
             labels: normalizedLabels,
             // Return the min/max bounds so we can use them later.
